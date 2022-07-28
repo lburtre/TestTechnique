@@ -28,11 +28,13 @@ public class PopUpPrefab : MonoBehaviour
     {
         SelectMenu.OnNewButtonToInstanciate += OnNewButtonToInstanciate;
         SelectMenu.OnClickNewData += OnClickNewData;
+        gameObject.SetActive(false);
     }
 
     private void OnClickNewData()
     {
         ResetPopUpPrefab();
+        gameObject.SetActive(true);
     }
 
     private void OnNewButtonToInstanciate()
@@ -60,6 +62,7 @@ public class PopUpPrefab : MonoBehaviour
         }
 
         containerDescriptionText.text = "";
+        gameObject.SetActive(false);
     }
 
     public void UpdateContentText(string contentText)
