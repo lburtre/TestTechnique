@@ -32,18 +32,4 @@ public class PopUpPrefab : MonoBehaviour
         if (Instance == this)
             Instance = null;
     }
-
-    [System.Serializable]
-    public class ListObjectInJsonFile
-    {
-        public List<ObjectInJsonFile> listObjectInJsonFile = new List<ObjectInJsonFile>();
-    }
-
-    [System.Serializable]
-    public class ObjectInJsonFile
-    {
-        public string id;
-        public string title;
-        public string content;
-    }
 }

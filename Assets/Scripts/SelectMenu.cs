@@ -8,24 +8,38 @@ public class SelectMenu : MonoBehaviour
     [SerializeField] private string json1PathFromApp; // => /Scripts/Json/Json1.json
     [SerializeField] private string json2PathFromApp;
 
+    private ObjectsInJsonFile objectsFromJson;
+
     public void OnCLickButtonJson1()
     {
-        string jsonText = ReturnJson(json1PathFromApp);
-        Debug.Log(jsonText);
+        UpdateObjectsInJson(json1PathFromApp);
     }
 
     public void OnCLickButtonJson2()
     {
-        string jsonText = ReturnJson(json2PathFromApp);
-        Debug.Log(jsonText);
+        UpdateObjectsInJson(json2PathFromApp);
     }
 
-    private string ReturnJson(string path)
+    private void UpdateObjectsInJson(string path)
     {
-        using (StreamReader stream = new StreamReader(Application.dataPath + path))
+        using (StreamReader reader = File.OpenText(Application.dataPath + path))
         {
-            string json = stream.ReadToEnd();
-            return json;
+            string json = reader.ReadToEnd();
+            objectsFromJson = JsonUtility.FromJson<ObjectsInJsonFile>("{\"listObject\":" + json + "}");
         }
+    }
+
+    [System.Serializable]
+    public class ObjectsInJsonFile
+    {
+        public List<ObjectInJsonFile> listObject = new List<ObjectInJsonFile>();
+    }
+
+    [System.Serializable]
+    public class ObjectInJsonFile
+    {
+        public int id;
+        public string title;
+        public string content;
     }
 }
