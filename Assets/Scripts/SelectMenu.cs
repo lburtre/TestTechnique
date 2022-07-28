@@ -7,40 +7,58 @@ public delegate void SelectMenuEventHandler();
 
 public class SelectMenu : MonoBehaviour
 {
-    public static event SelectMenuEventHandler OnChangeUpdatePopUp;
+    public static event SelectMenuEventHandler OnNewButtonToInstanciate;
+    public static event SelectMenuEventHandler OnClickNewData;
 
     [SerializeField] private string json1PathFromApp; // => /Scripts/Json/Json1.json
     [SerializeField] private string json2PathFromApp;
 
-    private ObjectsInJsonFile objectsFromJson;
+    private JsonFileObjects objectsFromJson;
+
+    public static JsonFileObject ActualJsonFileObject { get; private set; }
 
     public void OnCLickButtonJson1()
     {
-        UpdateObjectsInJson(json1PathFromApp);
+        OnClickNewData?.Invoke();
+        UpdateObjectsFromJson(json1PathFromApp);
     }
 
     public void OnCLickButtonJson2()
     {
-        UpdateObjectsInJson(json2PathFromApp);
+        OnClickNewData?.Invoke();
+        UpdateObjectsFromJson(json2PathFromApp);
     }
 
-    private void UpdateObjectsInJson(string path)
+    private void UpdateObjectsFromJson(string path)
     {
         using (StreamReader reader = File.OpenText(Application.dataPath + path))
         {
             string json = reader.ReadToEnd();
-            objectsFromJson = JsonUtility.FromJson<ObjectsInJsonFile>("{\"listObject\":" + json + "}");
+            objectsFromJson = JsonUtility.FromJson<JsonFileObjects>("{\"listObject\":" + json + "}");
+        }
+
+        InstanciateButton();
+    }
+
+    public void InstanciateButton()
+    {
+        int numberObject = objectsFromJson.listObject.Count;
+
+        for (int i = 0; i < numberObject; i++)
+        {
+            ActualJsonFileObject = objectsFromJson.listObject[i];
+            OnNewButtonToInstanciate?.Invoke();
         }
     }
 
     [System.Serializable]
-    public class ObjectsInJsonFile
+    public class JsonFileObjects
     {
-        public List<ObjectInJsonFile> listObject = new List<ObjectInJsonFile>();
+        public List<JsonFileObject> listObject = new List<JsonFileObject>();
     }
 
     [System.Serializable]
-    public class ObjectInJsonFile
+    public class JsonFileObject
     {
         public int id;
         public string title;
