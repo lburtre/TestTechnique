@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+public delegate void SelectMenuEventHandler();
+
 public class SelectMenu : MonoBehaviour
 {
+    public static event SelectMenuEventHandler OnChangeUpdatePopUp;
+
     [SerializeField] private string json1PathFromApp; // => /Scripts/Json/Json1.json
     [SerializeField] private string json2PathFromApp;
 
